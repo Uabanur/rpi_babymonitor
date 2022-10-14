@@ -1,0 +1,13 @@
+[Unit]
+Description=babymonitor
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi/projects/babymonitor
+Environment=FLASK_ENV=development
+ExecStart=flask run --host=0.0.0.0
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target

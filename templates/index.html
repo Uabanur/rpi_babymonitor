@@ -1,0 +1,113 @@
+<head>
+  <style>
+    .stream {
+      position: relative;
+      width: 100%;
+      display:flex;
+      flex-direction: column;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .control-panel {
+      position: relative;
+      display:flex;
+      flex-direction: row;
+      margin: 0 auto;
+      margin-top: 50px;
+      justify-content: space-between;
+      max-width: 500px;
+      border: 1px solid black
+    }
+    .btn-group {
+      padding: 1em;
+      display:flex;
+      flex-direction: column;
+    }
+    .btn-row {
+      width: 100px;
+      display:flex;
+      flex-direction: row;
+    }
+    button {
+      display: block;
+      height: 40px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="stream">
+                <h3 class="mt-5">Live Streaming</h3>
+                <img src={{ url_for('video_feed') }}>
+            </div>
+            <div class="control-panel">
+              <div class="btn-group">
+                <p>Move camera</p>
+                <div class="btn-row">
+                  <button onclick="move(0, -1)">
+                    Up
+                  </button>
+                </div>
+                <div class="btn-row">
+                  <button onclick="move(-1, 0)">
+                    Left
+                  </button>
+                  <button onclick="move(1, 0)">
+                    Right
+                  </button>
+                </div>
+                <div class="btn-row">
+                  <button onclick="move(0, 1)">
+                    Down
+                  </button>
+                </div>
+              </div>
+              <div class="btn-group">
+                <p>Zoom camera</p>
+                <div class="btn-row">
+                  <button onclick="zoom(-1)">
+                    In
+                  </button>
+                </div>
+                <div class="btn-row">
+                  <button onclick="zoom(1)">
+                    Out
+                  </button>
+                </div>
+              </div>
+              <div class="btn-group">
+                <p>Reset camera</p>
+                <button onclick="reset()">
+                  Reset
+                </button>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  function zoom(change){
+    const speed = 0.05;
+    const content = {'zoom': change * speed}
+    post("/zoom_camera", content)
+  }
+  function move(x, y){
+    const speed = 0.05;
+    const content = {'x' : x * speed, 'y' : y * speed}
+    post("/move_camera", content)
+  }
+  function reset() {
+      post("/reset_camera", {})
+  }
+  function post(endpoint, content){
+    return fetch(endpoint, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'}, 
+      body: JSON.stringify(content)
+    });
+  }
+</script>
+</body>
